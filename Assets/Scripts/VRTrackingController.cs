@@ -3,14 +3,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Minimal VR "character controller" that ONLY tracks the headset and the two
-/// controllers using the new Input System (no locomotion, no interaction toolkit).
+/// Minimal VR tracking script: ONLY tracks the headset and the two controllers
+/// using the new Input System (no locomotion, no XR Interaction Toolkit).
+/// It also raises trigger press / release events, which VRGrabber uses to
+/// pick up and throw objects.
 ///
 /// Setup:
-///   Rig Root (this script + optional CharacterController, positioned at the floor)
+///   Rig Root (this script, positioned at the floor)
 ///   ├── Head       (Camera)
-///   ├── LeftHand   (empty or controller model)
-///   └── RightHand  (empty or controller model)
+///   ├── LeftHand   (VRGrabber + optional controller model)
+///   └── RightHand  (VRGrabber + optional controller model)
 ///
 /// Requires the Input System package and an XR plugin (OpenXR) enabled.
 /// </summary>
@@ -22,13 +24,6 @@ public class VRTrackingController : MonoBehaviour
     [SerializeField] private Transform head;
     [SerializeField] private Transform leftHand;
     [SerializeField] private Transform rightHand;
-
-    [Header("Optional: capsule follows the headset (room-scale)")]
-    [SerializeField] private CharacterController characterController;
-    [SerializeField] private float minHeight = 0.5f;
-    [SerializeField] private float maxHeight = 2.2f;
-    [Tooltip("Distance from the eyes to the top of the head.")]
-    [SerializeField] private float headTopOffset = 0.1f;
 
     [Header("Head Actions")]
     [SerializeField] private InputActionProperty headPosition;
@@ -110,8 +105,6 @@ public class VRTrackingController : MonoBehaviour
         ApplyPose(leftHand,  leftPosition,  leftRotation);
         ApplyPose(rightHand, rightPosition, rightRotation);
 
-        UpdateCharacterController();
-
         TrackTrigger(Hand.Left,  leftTrigger);
         TrackTrigger(Hand.Right, rightTrigger);
     }
@@ -123,18 +116,6 @@ public class VRTrackingController : MonoBehaviour
         target.SetLocalPositionAndRotation(
             position.action.ReadValue<Vector3>(),
             rotation.action.ReadValue<Quaternion>());
-    }
-
-    // Keeps the capsule under the headset so physical movement collides correctly.
-    private void UpdateCharacterController()
-    {
-        if (characterController == null || head == null) return;
-
-        Vector3 headLocal = head.localPosition;
-        float height = Mathf.Clamp(headLocal.y + headTopOffset, minHeight, maxHeight);
-
-        characterController.height = height;
-        characterController.center = new Vector3(headLocal.x, height * 0.5f + characterController.skinWidth, headLocal.z);
     }
 
     // ------------------------------------------------------------------
@@ -157,11 +138,13 @@ public class VRTrackingController : MonoBehaviour
         {
             triggerPressed[i] = true;
             OnTriggerPressed?.Invoke(hand, value);
+            Debug.Log("GRAB!");
         }
         else if (triggerPressed[i] && value <= releaseThreshold)
         {
             triggerPressed[i] = false;
             OnTriggerReleased?.Invoke(hand, value);
+            Debug.Log("throw that ho!");
         }
     }
 
@@ -170,13 +153,4 @@ public class VRTrackingController : MonoBehaviour
 
     /// <summary>True while the trigger is held past the press threshold.</summary>
     public bool IsTriggerPressed(Hand hand) => triggerPressed[(int)hand];
-
-    // ------------------------------------------------------------------
-    // Example usage from another script:
-    //
-    //   var vr = FindFirstObjectByType<VRTrackingController>();
-    //   vr.OnTriggerPressed  += (hand, v) => Debug.Log($"{hand} trigger pressed ({v:F2})");
-    //   vr.OnTriggerReleased += (hand, v) => Debug.Log($"{hand} trigger released");
-    //   float right = vr.GetTriggerValue(VRTrackingController.Hand.Right);
-    // ------------------------------------------------------------------
 }
