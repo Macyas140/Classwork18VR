@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 8606597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.49, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VRGrabber
   tracking: {fileID: 1409862252}
   hand: 1
-  grabRadius: 10
+  grabRadius: 0.5
   grabCenterOffset: {x: 0, y: 0, z: 0}
   grabLayers:
     serializedVersion: 2
@@ -681,6 +681,18 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  leftGrip:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Left Grip
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 26c38e0b-b226-49da-8e58-09e0b47148a3
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   rightPosition:
     m_UseReference: 0
     m_Action:
@@ -741,8 +753,37 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  rightGrip:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Right Grip
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: dc6846a6-a338-4eb0-9403-4295b6f3f251
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  buttonA:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Button A
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: c714830a-7137-4598-a8f1-d683b161eb1d
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   pressThreshold: 0.6
   releaseThreshold: 0.4
+  projectilePrefab: {fileID: 6409017452700788262, guid: b4b183b537acada47a6c7f540017ab6f, type: 3}
+  projectileSpeed: 10
+  projectileScale: 0.1
+  muzzleOffset: 0.1
+  fireCooldown: 0.15
 --- !u!4 &1409862253
 Transform:
   m_ObjectHideFlags: 0
@@ -1004,7 +1045,7 @@ Transform:
   m_GameObject: {fileID: 1675636192}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.224, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1148,7 +1189,7 @@ Transform:
   m_GameObject: {fileID: 1983051436}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.14, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 1
   m_Children: []
